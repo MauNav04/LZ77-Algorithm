@@ -1,9 +1,10 @@
-#include "algorithmLZ77.h"
+#include "algorithm.h"
+
 // Constructor
-algorithmLZ77::algorithmLZ77() {}
+Algorithm::Algorithm() {}
 
 // Función que ejecuta el algoritmo
-void algorithmLZ77::compress() {
+void Algorithm::compress() {
     // Se crea una matriz de dimensiones (tamaño del texto X 3)
     createMatrix();
     // Ejecución del algoritmo (Se repite hasta que se acabe el texto introducido)
@@ -14,9 +15,9 @@ void algorithmLZ77::compress() {
         setNext();
         solution();
         current = current + match + 1;
-        *(*(compresMat+fila)+0) = to_string(offset);
-        *(*(compresMat+fila)+1) = to_string(match);
-        *(*(compresMat+fila)+2) = nextChar;
+        *(*(compresMat + fila) + 0) = to_string(offset);
+        *(*(compresMat + fila) + 1) = to_string(match);
+        *(*(compresMat + fila) + 2) = nextChar;
         fila++;
     }
     // Método para imprimir el contenido de la matriz en la consola
@@ -25,24 +26,21 @@ void algorithmLZ77::compress() {
 }
 
 // Coloca los caracteres de la palabra en el dataBuffer dependiendo del caracter que se está leyendo
-void algorithmLZ77::inputChars() {
-    for (int i = 0; i < dataBuffer ; i++)
-    {
+void Algorithm::inputChars() {
+    for (int i = 0; i < dataBuffer; i++) {
         if (current + i < word.length()) {
             dBArr[i] = word.at(current + i);
 
             cout << dBArr[i] << " ";
-        }
-        else {
+        } else {
             break;
         }
     }
-
     cout << endl;
 }
 
 //Coloca los valores correspondientes en el buffer de busqueda
-void algorithmLZ77::inputSearchBuffer() {
+void Algorithm::inputSearchBuffer() {
     if (current > 0) {
         int arrCoutn = 0;
         for (int i = current - 1; i >= 0; i--) {
@@ -56,11 +54,12 @@ void algorithmLZ77::inputSearchBuffer() {
         cout << endl;
     }
 }
+
 /*Verifica si hay una coincidencia en los arrays
 * En caso de que se sí, toma la que tenga más datos iguales seguidos y actualiza el offset y el match y retrona true
 * En caso de que no, coloca valores de cero en offset y array y retorna false
 */
-bool algorithmLZ77::checkMatch() {
+bool Algorithm::checkMatch() {
     int possibleMatchIndex = -1;
     int equalChars = 0;
     int maxCharsMatched = 0;
@@ -70,18 +69,14 @@ bool algorithmLZ77::checkMatch() {
         offset = 0;
         match = 0;
         return false;
-    }
-
-    else {
-        for (int i = 0; i < searchBuffer; i++)
-        {
+    } else {
+        for (int i = 0; i < searchBuffer; i++) {
             if (sBArr[i] == dBArr[equalChars]) {
                 equalChars++;
-                for (int j = i-1; j >= 0; j--) {
+                for (int j = i - 1; j >= 0; j--) {
                     if (sBArr[j] == dBArr[equalChars]) {
                         equalChars++;
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
@@ -98,44 +93,43 @@ bool algorithmLZ77::checkMatch() {
         offset = 0;
         match = 0;
         return false;
-    }
-    else {
+    } else {
         offset = possibleMatchIndex;
         match = maxCharsMatched;
         return true;
     }
 }
+
 // Determina el valor de la siguiente letra del string para colocarla en la solución
-void algorithmLZ77::setNext() {
+void Algorithm::setNext() {
     nextChar = dBArr[match];
 }
+
 // Guarda y muestra la solución en el formato indicado
-void algorithmLZ77::solution() {
+void Algorithm::solution() {
     cout << "offset: " << offset << " , " << "match: " << match << " , " << "next" << nextChar << endl;
     cout << endl;
 }
-void algorithmLZ77::createMatrix() {
+
+void Algorithm::createMatrix() {
     // crear matriz para guardar los datos comprimidos
     for (int i = 0; i < word.length(); ++i) {
         compresMat[i] = new string[3];
     }
 }
-void algorithmLZ77::showMatrix() {
+
+void Algorithm::showMatrix() {
     for (int i = 0; i < word.length(); ++i) {
         for (int j = 0; j < 3; ++j) {
-            if (*(*(compresMat+i)+j)==""){
+            if (*(*(compresMat + i) + j) == "") {
                 break;
+            } else if (j == 0) {
+                cout << "(" << *(*(compresMat + i) + j) << ", ";
+            } else if (j == 1) {
+                cout << *(*(compresMat + i) + j) << ", ";
+            } else {
+                cout << *(*(compresMat + i) + j) << ")" << endl;
             }
-            else if (j==0){
-                cout<<"("<<*(*(compresMat+i)+j)<<", ";
-            }
-            else if (j==1){
-                cout<<*(*(compresMat+i)+j)<<", ";
-            }
-            else{
-                cout<<*(*(compresMat+i)+j)<<")"<<endl;
-            }
-
         }
     }
 }
