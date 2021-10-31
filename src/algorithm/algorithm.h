@@ -9,7 +9,7 @@ using namespace std;
 class Algorithm {
 public:
     // constructor
-    Algorithm();
+    Algorithm(string word);
 
     // métodos
     void compress();
@@ -37,7 +37,7 @@ public:
     int current = 0;
     int fila = 0;
     string nextChar;
-    string word = "cabracadabrarrarrad";
+    string word;
     string **compresMat = new string *[word.length()];
 
     string dBArr[6];
