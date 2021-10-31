@@ -1,7 +1,9 @@
 #include "algorithm.h"
 
 // Constructor
-Algorithm::Algorithm() {}
+Algorithm::Algorithm(string word) {
+    this->word = word;
+}
 
 // Función que ejecuta el algoritmo
 void Algorithm::compress() {
