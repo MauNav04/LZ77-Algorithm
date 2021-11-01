@@ -19,9 +19,7 @@ set(PROJECT_SOURCES
         src/main.cpp
         src/ui/mainscreen.cpp
         src/ui/mainscreen.h
-        src/ui/mainscreen.ui
-        src/algorithm/algorithm.cpp
-        src/algorithm/algorithm.h)
+        src/ui/mainscreen.ui)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(LZ77-Tool
