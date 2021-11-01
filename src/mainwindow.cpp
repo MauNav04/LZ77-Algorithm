@@ -18,6 +18,8 @@ MainWindow::~MainWindow()
 void MainWindow::compress() {
     // Se crea una matriz de dimensiones (tamaño del texto X 3)
     createMatrix();
+    current = 0;
+    fila = 0;
     // Ejecución del algoritmo (Se repite hasta que se acabe el texto introducido)
     while (current <= word.length()) {
         inputChars();
@@ -31,6 +33,7 @@ void MainWindow::compress() {
         *(*(compresMat+fila)+2) = nextChar;
         fila++;
     }
+
     // Método para imprimir el contenido de la matriz en la consola
     // se muestra como códigos con formato (offset, match, letter)
     showMatrix();
@@ -155,9 +158,11 @@ void MainWindow::showMatrix() {
     }
     QString str = QString::fromUtf8(texto.c_str());
     ui->textEdit->setText(str);
+    texto ="";
 }
 void MainWindow::on_pushButton_clicked()
 {
+    ui->textEdit->setText("");
     QString lineEditText= ui->lineEdit->text();
     string insertedWord =lineEditText.toStdString();
     word = insertedWord;
@@ -167,6 +172,6 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-
+    ui->textEdit->setText("");
 }
 
