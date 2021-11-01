@@ -38,7 +38,6 @@ void MainScreen::inputChars() {
     for (int i = 0; i < dataBuffer; i++) {
         if (current + i < word.length()) {
             dBArr[i] = word.at(current + i);
-
             cout << dBArr[i] << " ";
         } else {
             break;
@@ -133,14 +132,14 @@ void MainScreen::showMatrix() {
             if ((*(compresMat + i) + j)->empty()) {
                 break;
             } else if (j == 0) {
-                cout << "(" << *(*(compresMat + i) + j) << ", ";
+                cout << "(" << *(*(compresMat + i) + j) << ",";
                 codedWord = codedWord + "(" + *(*(compresMat + i) + j) + ",";
             } else if (j == 1) {
-                cout << *(*(compresMat + i) + j) << ", ";
+                cout << *(*(compresMat + i) + j) << ",";
                 codedWord = codedWord + *(*(compresMat + i) + j) + ",";
             } else {
                 cout << *(*(compresMat + i) + j) << ")" << endl;
-                codedWord = codedWord + *(*(compresMat + i) + j) + ") ";
+                codedWord = codedWord + *(*(compresMat + i) + j) + ")";
             }
         }
     }
@@ -150,8 +149,73 @@ void MainScreen::showMatrix() {
     codedWord = "";
 }
 
-void MainScreen::decompress(const string &userInput) {
+string MainScreen::clearUserInput(const string &matrix, const string &delimiter) {
+    string userInputCleared;
+    int currentIndex = 0;
+    int finalIndex = 0;
+    while (finalIndex = matrix.find(delimiter, currentIndex), finalIndex >= 0) {
+        if (delimiter == "(") {
+            userInputCleared += matrix.substr(currentIndex, finalIndex - currentIndex);
+        }
+        if (delimiter == ")") {
+            userInputCleared += matrix.substr(currentIndex, finalIndex - currentIndex) + ",";
+        }
+        currentIndex = finalIndex + 1;
+    }
+    userInputCleared += matrix.substr(currentIndex);
+    return userInputCleared;
+}
 
+string MainScreen::editUserInput(string &userMatrix) {
+    string userInputEdited;
+    userInputEdited = clearUserInput(userMatrix, "(");
+    userInputEdited = clearUserInput(userInputEdited, ")");
+
+    cout << "\n ---- User Input ---- \n" << userMatrix << '\n';
+
+    return userInputEdited;
+}
+
+vector<string> MainScreen::parseUserInput(string matrix, const string &delimiter) {
+    string matrixParsed;
+    vector<string> decompressionMatrix;
+    size_t index = 0;
+    while ((index = matrix.find(delimiter)) != string::npos) {
+        decompressionMatrix.push_back(matrix.substr(0, index));
+        matrix.erase(0, index + delimiter.length());
+    }
+
+    cout << "\n ---- User Input Parsed ---- " << endl;
+    for (const auto &member: decompressionMatrix) {
+        cout << " " + member + " ";
+    }
+    cout << '\n';
+
+    return decompressionMatrix;
+}
+
+void MainScreen::decompress(string userInput) {
+    string matrixEdited = editUserInput(userInput);
+    vector<string> matrixParsed = parseUserInput(matrixEdited, ",");
+
+    for (int i = 0; i < matrixParsed.size(); ++i) {
+        if ((i % 3) == 0) {
+            if (matrixParsed.at(i) == "0") {
+                decodedWord += matrixParsed.at(i + 2);
+            } else {
+                decodedWord += decodedWord.at((decodedWord.size() - 1) - stoi(matrixParsed.at(i)));
+                decodedWord += matrixParsed.at(i + 2);
+            }
+        }
+    }
+
+    cout << "\nOriginal Text: " << userInput << endl;
+    cout << "\nDecoded Text: " << decodedWord << endl;
+
+    QString userTextDecompressed = QString::fromStdString(decodedWord);
+    ui->compressResult->setPlainText("");
+    ui->decompressResult->setPlainText(userTextDecompressed);
+    decodedWord = "";
 }
 
 void MainScreen::on_compressButton_clicked() {
@@ -167,8 +231,4 @@ void MainScreen::on_decompressButton_clicked() {
 
     QString userText = ui->userText->toPlainText();
     this->decompress(userText.toStdString());
-
-    QString userTextDecompressed = QString::fromStdString(decodedWord);
-    ui->compressResult->setPlainText("");
-    ui->decompressResult->setPlainText(userTextDecompressed);
 }

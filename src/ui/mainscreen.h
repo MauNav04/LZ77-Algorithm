@@ -35,7 +35,13 @@ public:
 
     void showMatrix();
 
-    void decompress(const string& userInput);
+    string clearUserInput(const string &matrix, const string &delimiter);
+
+    string editUserInput(string &userMatrix);
+
+    vector<string> parseUserInput (string matrix, const string &delimiter);
+
+    void decompress(string userInput);
 
 private slots:
 
