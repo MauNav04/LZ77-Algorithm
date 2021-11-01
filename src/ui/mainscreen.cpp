@@ -132,19 +132,23 @@ void MainScreen::showMatrix() {
                 break;
             } else if (j == 0) {
                 cout << "(" << *(*(compresMat + i) + j) << ", ";
-                codedWord = codedWord + "("+*(*(compresMat+i)+j)+",";
+                codedWord = codedWord + "(" + *(*(compresMat + i) + j) + ",";
             } else if (j == 1) {
                 cout << *(*(compresMat + i) + j) << ", ";
-                codedWord = codedWord + *(*(compresMat+i)+j)+",";
+                codedWord = codedWord + *(*(compresMat + i) + j) + ",";
             } else {
                 cout << *(*(compresMat + i) + j) << ")" << endl;
-                codedWord = codedWord + *(*(compresMat+i)+j)+") ";
+                codedWord = codedWord + *(*(compresMat + i) + j) + ") ";
             }
         }
     }
+    QString userTextCompressed = QString::fromStdString(codedWord);
+    ui->compressResult->setPlainText(userTextCompressed);
+    ui->decompressResult->setPlainText("");
+    codedWord = "";
 }
 
-void MainScreen::decompress() {
+void MainScreen::decompress(const string &userInput) {
 
 }
 
@@ -154,18 +158,13 @@ void MainScreen::on_compressButton_clicked() {
     QString userText = ui->userText->toPlainText();
     word = userText.toStdString();
     this->compress();
-
-    QString userTextCompressed = QString::fromStdString(codedWord);
-    ui->compressResult->setPlainText(userTextCompressed);
-    ui->decompressResult->setPlainText("");
 }
 
 void MainScreen::on_decompressButton_clicked() {
     std::cout << "\n\n----------------- Decompressing -----------------" << std::endl;
 
     QString userText = ui->userText->toPlainText();
-    word = userText.toStdString();
-    this->decompress();
+    this->decompress(userText.toStdString());
 
     QString userTextDecompressed = QString::fromStdString(decodedWord);
     ui->compressResult->setPlainText("");

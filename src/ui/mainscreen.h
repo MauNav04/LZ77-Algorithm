@@ -35,7 +35,7 @@ public:
 
     void showMatrix();
 
-    void decompress();
+    void decompress(const string& userInput);
 
 private slots:
 
