@@ -13,6 +13,8 @@ MainScreen::~MainScreen() {
 void MainScreen::compress() {
     // Se crea una matriz de dimensiones (tamaño del texto X 3)
     createMatrix();
+    current = 0;
+    fila = 0;
     // Ejecución del algoritmo (Se repite hasta que se acabe el texto introducido)
     while (current <= word.length()) {
         inputChars();
@@ -21,11 +23,12 @@ void MainScreen::compress() {
         setNext();
         solution();
         current = current + match + 1;
-        *(*(compresMat + fila) + 0) = to_string(offset);
-        *(*(compresMat + fila) + 1) = to_string(match);
-        *(*(compresMat + fila) + 2) = nextChar;
+        *(*(compresMat+fila)+0) = to_string(offset);
+        *(*(compresMat+fila)+1) = to_string(match);
+        *(*(compresMat+fila)+2) = nextChar;
         fila++;
     }
+
     // Método para imprimir el contenido de la matriz en la consola
     // se muestra como códigos con formato (offset, match, letter)
     showMatrix();
@@ -125,23 +128,29 @@ void MainScreen::createMatrix() {
 }
 
 void MainScreen::showMatrix() {
-    cout << "--- Codes Matrix ---" << endl;
     for (int i = 0; i < word.length(); ++i) {
         for (int j = 0; j < 3; ++j) {
-            if ((*(compresMat + i) + j)->empty()) {
+            if (*(*(compresMat+i)+j)==""){
                 break;
-            } else if (j == 0) {
-                cout << "(" << *(*(compresMat + i) + j) << ", ";
-                codedWord = codedWord + "("+*(*(compresMat+i)+j)+",";
-            } else if (j == 1) {
-                cout << *(*(compresMat + i) + j) << ", ";
-                codedWord = codedWord + *(*(compresMat+i)+j)+",";
-            } else {
-                cout << *(*(compresMat + i) + j) << ")" << endl;
-                codedWord = codedWord + *(*(compresMat+i)+j)+") ";
             }
+            else if (j==0){
+                cout<<"("<<*(*(compresMat+i)+j)<<", ";
+                texto = texto + "("+*(*(compresMat+i)+j)+", ";
+            }
+            else if (j==1){
+                cout<<*(*(compresMat+i)+j)<<", ";
+                texto = texto + *(*(compresMat+i)+j)+", ";
+            }
+            else{
+                cout<<*(*(compresMat+i)+j)<<"), ";
+                texto = texto + *(*(compresMat+i)+j)+") ";
+            }
+
         }
     }
+    QString str = QString::fromUtf8(texto.c_str());
+    ui->textEdit->setText(str);
+    texto ="";
 }
 
 void MainScreen::decompress() {
