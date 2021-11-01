@@ -13,6 +13,8 @@ MainScreen::~MainScreen() {
 void MainScreen::compress() {
     // Se crea una matriz de dimensiones (tamaño del texto X 3)
     createMatrix();
+    current = 0;
+    fila = 0;
     // Ejecución del algoritmo (Se repite hasta que se acabe el texto introducido)
     while (current <= word.length()) {
         inputChars();
